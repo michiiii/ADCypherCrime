@@ -1,0 +1,10 @@
+{
+    "queries": [		
+        {
+            "name": "Your custom query",
+            "category": "16 - Custom",
+            "shortname": "CYPHER_Custom01",
+            "query": "MATCH (c:Computer) RETURN c.haslaps as LAPSEnabled, count(*) as Computers ORDER BY Computers DESC LIMIT 5000"
+        }
+	]
+}

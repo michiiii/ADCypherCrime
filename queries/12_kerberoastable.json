@@ -1,0 +1,16 @@
+{
+    "queries": [		
+        {
+            "name": "Kerberoastable Users",
+            "shortname": "CYPHER_Kerberoastable_Users",
+            "category": "12 - Kerberoasting",
+            "query": "MATCH (n:User) WHERE n.hasspn=true AND n.enabled=true RETURN n.name as Username, n.enabled, toString(datetime({epochSeconds: ToInteger(coalesce(n.pwdlastset,0))})) as PWDLastSet, n.description as Description, n.sensitive as Sensitive, n.admincount as AdminCount, n.serviceprincipalnames as SPNs"
+        },
+        {
+            "name": "Kerberoastable with path to High Value Groups",
+            "category": "12 - Kerberoasting",
+            "shortname": "CYPHER_Kerb_Path_to_HVP",
+            "query": "match p=shortestPath((n:User {hasspn:true})-[*1..]->(m:Group {highvalue:true})) where n.enabled = true return distinct n.name as Users, n.enabled AS Enabled, m.name as Group, m.highvalue as HighValue LIMIT 10000"
+        }
+	]
+}

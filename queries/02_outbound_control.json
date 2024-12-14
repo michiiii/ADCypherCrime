@@ -1,0 +1,22 @@
+{
+    "queries": [		
+        {
+            "name": "First degree object control (TOP 10000)",
+            "shortname": "CYPHER_ACL_OBOC_FD_TOP10000",
+            "category": "02 - Object control outbound",
+            "query": "MATCH p=(u)-[r1]->(n) WHERE r1.isacl=true AND u.enabled=true WITH u.name as name, LABELS(u)[0] as type, COUNT(DISTINCT(n)) as controlled WHERE name IS NOT NULL RETURN name,type, controlled ORDER BY controlled DESC LIMIT 10000"
+        },
+        {
+            "name": "Group delegated object control",
+            "shortname": "CYPHER_ACL_OBOC_GD",
+            "category": "02 - Object control outbound",
+            "query": "MATCH p=(u)-[r1:MemberOf*1..]->(g:Group)-[r2]->(n) WHERE r2.isacl=true WITH u.name as name, u.enabled as Enabled, LABELS(u)[0] as type, g.highvalue as highly_privileged, COUNT(DISTINCT(n)) as controlled WHERE name IS NOT NULL RETURN name,Enabled, type, highly_privileged, controlled ORDER BY controlled DESC LIMIT 10000"
+        },
+        {
+            "name": "Direct Relationships - Compromised objects - Direct (COUNT)",
+            "shortname": "CYPHER_ACL_OBOC_FD_TOP10000_owned_COUNT",
+            "category": "02 - Object control outbound",
+            "query": "MATCH p=(u)-[r1]->(n) WHERE r1.isacl=true AND u.enabled=true AND u.owned=true WITH u.name as name, LABELS(u)[0] as type, COUNT(DISTINCT(n)) as controlled WHERE name IS NOT NULL RETURN name,type, controlled ORDER BY controlled DESC"
+        }
+	]
+}

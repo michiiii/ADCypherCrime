@@ -1,0 +1,10 @@
+{
+    "queries": [		
+        {
+            "name": "ASREPRoasting",
+            "shortname": "Users_ASREPRoasting",
+            "category": "13 - ASREPRoasting",
+            "query": "MATCH (n:User {dontreqpreauth: true}) WHERE n.enabled=true RETURN n.name as Username, n.displayname as DisplayName, n.description as Description, n.title as Title, n.pwdneverexpires as PasswordNeverExpires, n.passwordnotreqd as PasswordNotRequired, n.sensitive as Sensitive, n.admincount as AdminCount, n.serviceprincipalnames as SPNs"
+        }
+	]
+}

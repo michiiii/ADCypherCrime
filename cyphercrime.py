@@ -1,22 +1,3 @@
-"""
-Project Title: AD Cypher Crime
-Description: This script executes a series of Cypher queries on a Neo4j database and outputs the results to nice looking HTML files.
-             It reads queries from a JSON file and supports customizable database connection parameters.
-Author: Michael Ritter
-Creation Date: 10.01.2024
-Version: 1.0
-
-Requirements:
-- Neo4j Python driver
-- Colorama for colored console output
-
-Usage:
-- This script can be run from the command line with customizable parameters for database connection and query file.
-- Example:
-  python cypher_query_executor.py --url neo4j://localhost:7687 --query_file neo4j_queries.json --username neo4j --out_path Report
-"""
-
-
 import argparse
 import json
 import getpass
@@ -53,10 +34,10 @@ def parse_arguments():
         help='URL for connecting to the Neo4j database. Defaults to "neo4j://localhost:7687".'
     )
     parser.add_argument(
-        '--query_file', 
+        '--queries_dir', 
         type=str, 
-        default='neo4j_queries.json', 
-        help='Path to the JSON file containing the Cypher queries. Defaults to "neo4j_queries.json".'
+        default='queries', 
+        help='Path to the directory containing JSON files with Cypher queries. Defaults to "queries".'
     )
     parser.add_argument(
         '--username', 
@@ -86,13 +67,10 @@ def parse_arguments():
     
     return args
 
-
-
 def ensure_directory_exists(directory_path):
     if not os.path.exists(directory_path):
         print(f"Creating directory: {directory_path}")
         os.makedirs(directory_path)
-
 
 def check_file_existence(file_path):
     if not os.path.exists(file_path):
@@ -100,16 +78,26 @@ def check_file_existence(file_path):
         return False
     return True
 
-def load_queries(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            query_data = json.load(file)
-            return query_data["queries"]
-    except json.JSONDecodeError:
-        print("Query file is not valid JSON.")
-    except KeyError:
-        print("Invalid query file structure. Expected 'queries' key.")
-    return None
+def load_queries_from_directory(directory_path):
+    queries = []
+
+    if not os.path.exists(directory_path):
+        print(f"Queries directory '{directory_path}' does not exist.")
+        return None
+
+    for file_name in os.listdir(directory_path):
+        if file_name.endswith('.json'):
+            file_path = os.path.join(directory_path, file_name)
+            try:
+                with open(file_path, 'r') as file:
+                    query_data = json.load(file)
+                    queries.extend(query_data.get("queries", []))
+            except json.JSONDecodeError:
+                print(f"Query file '{file_name}' is not valid JSON.")
+            except KeyError:
+                print(f"Invalid query file structure in '{file_name}'. Expected 'queries' key.")
+    
+    return queries if queries else None
 
 def execute_queries(driver, queries):
     results = []
@@ -308,10 +296,7 @@ def main():
     banner()
     args = parse_arguments()
 
-    if not check_file_existence(args.out_path) or not check_file_existence(args.query_file):
-        return
-
-    queries = load_queries(args.query_file)
+    queries = load_queries_from_directory(args.queries_dir)
     if queries is None:
         return
 

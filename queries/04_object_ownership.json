@@ -1,0 +1,10 @@
+{
+    "queries": [		
+        {
+            "name": "Users with most Compromised objects",
+            "shortname": "CYPHER_ACL_OBJECT_OWNER",
+            "category": "04 - Object Ownership",
+            "query": "MATCH (u:User)-[:Owns]->(n) WHERE u.enabled=true RETURN count(DISTINCT(n.name)) AS OwnedObjects, u.name AS USER ORDER BY count(DISTINCT(n.name)) DESC"
+        }
+	]
+}

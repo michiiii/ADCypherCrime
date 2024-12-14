@@ -1,0 +1,16 @@
+{
+    "queries": [
+        {
+            "name": "AD objects with unconstrained delegation configured",
+            "category": "09 - Computers",
+            "shortname": "CYPHER_DU_Unconstrained",
+            "query": "MATCH (c1)-[:MemberOf*1..]->(g:Group) WHERE g.objectid ENDS WITH '-516' WITH COLLECT(c1.name) AS domainControllers MATCH (c2 {unconstraineddelegation:true}) WHERE NOT c2.name IN domainControllers RETURN c2.name as ObjectName,c2.enabled as Enabled, LABELS(c2)[0] as ObjectType,c2.unconstraineddelegation as UnconstrainedDelegation ORDER BY c2.name ASC"
+        },
+        {
+            "name": "Enabled computer objects with LastLogon date",
+            "category": "09 - Computers",
+            "shortname": "CYPHER_DU_Enabled_Computers",
+            "query": "MATCH (c:Computer) WHERE c.enabled = TRUE RETURN c.name as ObjectName, toString(datetime({epochSeconds: ToInteger(coalesce(c.lastlogon,0))})) as LastLogon, replace(c.name, '$@', '.') as DNSHostName ORDER BY LastLogon DESC LIMIT 5000"
+        }
+    ]
+}

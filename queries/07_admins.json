@@ -1,0 +1,40 @@
+{
+    "queries": [		
+        {
+            "name": "Users Computer Direct Admin privileges to computers",
+            "shortname": "CYPHER_Users_with_Direct_Admin_Privilieges",
+            "category": "07 - Admins",
+            "query": "MATCH (u:User)-[:AdminTo]->(c:Computer) RETURN count(DISTINCT(c.name)) AS COMPUTER, u.name AS USER ORDER BY count(DISTINCT(c.name)) DESC"
+        },
+        {
+            "name": "Privileged Build in groups and their member count",
+            "shortname": "CYPHER_Users_with_buildin_groups_member_count",
+            "category": "07 - Admins",
+            "query": "MATCH (u)-[:MemberOf*1..]->(g:Group) WHERE g.objectid =~ '(?i)S-1-5-.*-519' OR g.objectid =~ '(?i)S-1-5-.*-512' OR g.objectid =~ '(?i)S-1-5-.*-518' OR g.objectid =~ '(?i)S-1-5-.*-516' OR g.objectid =~ '(?i)S-1-5-.*-517' OR g.objectid =~ '(?i)S-1-5-.*-520' OR g.objectid =~ '(?i)S-1-5-.*-521' OR g.objectid =~ '(?i)S-1-5-.*-525' OR g.objectid =~ '(?i)S-1-5-.*-526' OR g.objectid =~ '(?i)S-1-5-.*-527' OR g.objectid = 'S-1-5-32-544' OR g.objectid = 'S-1-5-32-548' OR g.objectid = 'S-1-5-32-549' OR g.objectid = 'S-1-5-32-550' OR g.objectid = 'S-1-5-32-551' OR g.objectid = 'S-1-5-32-580' OR g.objectid = 'S-1-5-32-578' OR g.name = 'DnsAdmins' OR g.name = 'Exchange Windows Permissions' RETURN g.name AS GroupName, count(u) AS MembersCounted"
+        },
+        {
+            "name": "Privileged Build in groups and their members",
+            "shortname": "CYPHER_Users_with_buildin_groups_members",
+            "category": "07 - Admins",
+            "query": "MATCH (u)-[:MemberOf*1..]->(g:Group) WHERE g.objectid =~ '(?i)S-1-5-.*-519' OR g.objectid =~ '(?i)S-1-5-.*-512' OR g.objectid =~ '(?i)S-1-5-.*-518' OR g.objectid =~ '(?i)S-1-5-.*-516' OR g.objectid =~ '(?i)S-1-5-.*-517' OR g.objectid =~ '(?i)S-1-5-.*-520' OR g.objectid =~ '(?i)S-1-5-.*-521' OR g.objectid =~ '(?i)S-1-5-.*-525' OR g.objectid =~ '(?i)S-1-5-.*-526' OR g.objectid =~ '(?i)S-1-5-.*-527' OR g.objectid = 'S-1-5-32-544' OR g.objectid = 'S-1-5-32-548' OR g.objectid = 'S-1-5-32-549' OR g.objectid = 'S-1-5-32-550' OR g.objectid = 'S-1-5-32-551' OR g.objectid = 'S-1-5-32-580' OR g.objectid = 'S-1-5-32-578' OR g.name = 'DnsAdmins' OR g.name = 'Exchange Windows Permissions' RETURN g.name AS GroupName, u.name, u.enabled as Enabled, LABELS(u)[0] as ObjectType ORDER BY GroupName"
+        },
+        {
+            "name": "Groups that contain the word admin/adm and their member count",
+            "shortname": "CYPHER_Groups_contain_adm_count",
+            "category": "07 - Admins",
+            "query": "MATCH (u)-[:MemberOf*1..]->(g:Group) WHERE g.name =~ '.*((?i)admin|adm).*' RETURN g.name AS GroupName, COUNT(u) AS MemberCount ORDER BY g.name"
+        },
+        {
+            "name": "Groups that contain the word admin/adm and their members (TOP 1000)",
+            "shortname": "CYPHER_Groups_contain_adm",
+            "category": "07 - Admins",
+            "query": "MATCH (u)-[:MemberOf*1..]->(g:Group) WHERE g.name =~ '.*((?i)admin|adm).*' RETURN g.name AS GroupName, u.name, LABELS(u)[0] as type, u.enabled as Enabled ORDER BY GroupName LIMIT 1000"
+        },
+        {
+            "name": "Users Computer Indirect Admin privileges to computers",
+            "shortname": "CYPHER_Users_with_Indirect_Admin_Privilieges",
+            "category": "07 - Admins",
+            "query": "MATCH (u:User)-[:AdminTo]->(c:Computer) RETURN count(DISTINCT(c.name)) AS COMPUTER, u.name AS USER ORDER BY count(DISTINCT(c.name)) DESC"
+        }
+	]
+}

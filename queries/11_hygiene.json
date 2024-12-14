@@ -1,0 +1,16 @@
+{
+    "queries": [
+        {
+            "name": "Users that have never logged in",
+            "category": "11 - Hygiene",
+            "shortname": "CYPHER_Users_NeverActive",
+            "query": "MATCH (n:User) WHERE n.lastlogontimestamp=-1.0 AND n.enabled=TRUE RETURN n.name as Username,toString(datetime({epochSeconds: ToInteger(coalesce(n.lastlogon,0))})) as LastLogon ORDER BY n.name"
+        },
+        {
+            "name": "Users with Password Never Expires attribute set",
+            "category": "11 - Hygiene",
+            "shortname": "CYPHER_Users_PWNeverExpireExcept",
+            "query": "MATCH (n:User) WHERE n.pwdneverexpires RETURN n.name as Name,n.displayname as DisplayName,n.enabled as Enabled, n.highvalue as HighValue,  n.description as Description, n.title as Title, n.pwdneverexpires as PWDNeverExpires, n.passwordnotreqd as PWDNotReqd, n.sensitive as Sensitive, n.admincount as AdminCount, n.serviceprincipalnames as SPN, toString(datetime({epochSeconds: ToInteger(coalesce(n.pwdlastset,0))})) as PWDLastSet, toString(datetime({epochSeconds: ToInteger(coalesce(n.lastlogon,0))})) as LastLogon"
+        }
+	]
+}

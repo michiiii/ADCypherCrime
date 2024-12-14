@@ -1,0 +1,40 @@
+{
+    "queries": [		
+        {
+            "name": "Unsupported OS",
+            "category": "05 - Low hanging fruits",
+            "shortname": "CYPHER_Unsupported_OS",
+            "query": "MATCH (c:Computer) WHERE c.operatingsystem =~ '.*(2000|2003|2008|xp|vista|7|me).*' AND c.enabled=true RETURN c.name as Computer, c.operatingsystem as UnsupportedOS, c.enabled as Enabled, toString(datetime({epochSeconds: ToInteger(coalesce(c.lastlogon,0))})) as LastLogon"
+        },
+        {
+            "name": "Direct Relationships - Users in default groups",
+            "category": "05 - Low hanging fruits",
+            "shortname": "CYPHER_Relationships_Everyone",
+            "query": "MATCH p = (g:Group)-[r]->(n) WHERE r.isacl=true AND n.enabled=true  WITH g.name AS Source, type(r) as Relationship,n.name as Target, n.enabled as Enabled WHERE g.objectid ENDS WITH '-546' OR g.objectid ENDS WITH '-545' OR g.objectid ENDS WITH '-515' OR g.objectid ENDS WITH '-513' OR g.objectid ENDS WITH 'S-1-5-32-554' OR g.objectid ENDS WITH 'S-1-1-0' OR g.objectid ENDS WITH 'S-1-5-11' RETURN Source, Relationship, Target, Enabled"
+        },
+        {
+            "name": "Direct Relationships - Compromised objects - Direct (COUNT)",
+            "shortname": "CYPHER_ACL_OBOC_FD_TOP10000_owned_COUNT",
+            "category": "02 - Object control outbound",
+            "query": "MATCH p=(u)-[r1]->(n) WHERE r1.isacl=true AND u.enabled=true AND u.owned=true WITH u.name as name, LABELS(u)[0] as type, COUNT(DISTINCT(n)) as controlled WHERE name IS NOT NULL RETURN name,type, controlled ORDER BY controlled DESC"
+        },
+        {
+            "name": "Direct Relationships - Compromised objects - Direct",
+            "category": "05 - Low hanging fruits",
+            "shortname": "CYPHER_Relationships_OwnedObjects",
+            "query": "MATCH (u)-[r1]->(n) WHERE r1.isacl = true AND u.name AND n.highvalue=true IS NOT NULL AND u.enabled = true AND u.owned = true AND n.enabled = true WITH u.name as SourceName, LABELS(u)[0] as SourceType, type(r1) as RelationshipType, n.name as TargetName, LABELS(n)[0] as TargetType RETURN DISTINCT SourceName, SourceType, RelationshipType, TargetName, TargetType LIMIT 10000"
+        },
+        {
+            "name": "Direct Relationships - Compromised objects - Group delegated (COUNT)",
+            "category": "05 - Low hanging fruits",
+            "shortname": "CYPHER_Relationships_OwnedObjects-gd-count",
+            "query": "MATCH (u {enabled: true, owned: true})-[r1:MemberOf*1..]->(g:Group)-[r2 {isacl: true}]->(n) WHERE u.name IS NOT NULL WITH u.name as name, LABELS(u)[0] as ObjectType, n.highvalue as HighValueObject, COUNT(DISTINCT(n)) as controlled RETURN name, ObjectType, HighValueObject, controlled ORDER BY controlled DESC LIMIT 10000"
+        },
+        {
+            "name": "Direct Relationships - Compromised objects - Group delegated",
+            "category": "05 - Low hanging fruits",
+            "shortname": "CYPHER_Relationships_OwnedObjects-gd",
+            "query": "MATCH (u {enabled: true, owned: true})-[r1:MemberOf*1..]->(g:Group)-[r2 {isacl: true}]->(n) WHERE u.name IS NOT NULL WITH u.name as SourceName, LABELS(u)[0] as SourceType, type(r2) as RelationshipType, n.name as TargetName, LABELS(n)[0] as TargetType RETURN DISTINCT SourceName, SourceType, RelationshipType, TargetName, TargetType LIMIT 10000"
+        }
+    ]
+}

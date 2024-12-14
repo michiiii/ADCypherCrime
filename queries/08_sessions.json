@@ -1,0 +1,22 @@
+{
+    "queries": [		
+        {
+            "name": "User Sessions",
+            "shortname": "Users_Sessions",
+            "category": "08 - Sessions",
+            "query": "MATCH p=(n:User)--(c:Computer)-[:HasSession]->(n) return n.name as User,  c.name as Computer ORDER BY n.name"
+        },
+        {
+            "name": "Users Sessions Count",
+            "shortname": "Users_Sessions_Count",
+            "category": "08 - Sessions",
+            "query": "MATCH p=(n:User)--(c:Computer)-[:HasSession]->(n) return n.name as User, count(*) as Computers ORDER BY Computers DESC"
+        },
+        {
+            "name": "DA Sessions",
+            "category": "08 - Sessions",
+            "shortname": "CYPHER_DA_Sessions",
+            "query": "MATCH (n:User)-[:MemberOf]->(g:Group) WHERE g.objectid ENDS WITH '-512' MATCH p = (c:Computer)-[:HasSession]->(n) return n.name as Username, c.name as Computer"
+        }
+	]
+}

@@ -1,0 +1,28 @@
+{
+    "queries": [		
+        {
+            "name": "Domains",
+            "category": "01 - Forest",
+            "shortname": "CYPHER_Domains_Listing",
+            "query": "MATCH (n:Domain) return n.name as Domain, n.functionallevel as FunctionalLevel, n.highvalue as HighValue, n.domain as DNS, n.distinguishedname as DN, n.domainsid as SID"
+        },
+        {
+            "name": "Domain Trusts",
+            "category": "01 - Forest",
+            "shortname": "CYPHER_Domain_Trusts",
+            "query": "MATCH p=(n:Domain)-[r:TrustedBy]->(m:Domain) RETURN n.name as Domain1, r.trusttype as TrustType, r.isacl as IsACL, r.sidfiltering as SidFiltering, r.transitive as transitive, m.name as Domain2 order by n.name, m.name"
+        },
+        {
+            "name": "Domain Controllers",
+            "category": "01 - Forest",
+            "shortname": "CYPHER_Domain_Controllers",
+            "query": "MATCH (c:Computer)-[:MemberOf*1..]->(g:Group) WHERE g.objectid ENDS WITH '-516' RETURN c.name as Hostname, c.operatingsystem as OS, c.description as Description, toString(datetime({epochSeconds: ToInteger(coalesce(c.whencreated,0))})) as Created, c.haslaps as LAPS, c.enabled as Enabled, c.distinguishedname as DN"
+        },
+        {
+            "name": "Cross Domain Relationships (LIMIT 5000)",
+            "category": "01 - Forest",
+            "shortname": "CYPHER_CrossDomainRels",
+            "query": "MATCH (n)-[r]->(m) WHERE NOT n.domain = m.domain RETURN n.name as SourceName, LABELS(n)[0] as SourceType, TYPE(r) as Relationship, m.name as TargetName, LABELS(m)[0] as TargetType LIMIT 5000"
+        }
+    ]
+}

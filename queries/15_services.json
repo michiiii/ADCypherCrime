@@ -1,0 +1,130 @@
+{
+    "queries": [		
+
+        {
+            "name": "MSSQL - Enabled Computers with MSSQL SPN",
+            "shortname": "CYPHER_Computers_MSSQL",
+            "category": "15 - Services",
+            "query": "MATCH (c:Computer) WHERE ANY (x IN c.serviceprincipalnames WHERE toUpper(x) CONTAINS 'MSSQLSVC/') AND c.enabled=true RETURN c.name as Computer, c.serviceprincipalnames as SPN ORDER BY c.name ASC"
+        },
+        {
+            "name": "HTTP - Enabled Computers with HTTP SPN",
+            "shortname": "CYPHER_Computers_MSSQL",
+            "category": "15 - Services",
+            "query": "MATCH (c:Computer) WHERE ANY (x IN c.serviceprincipalnames WHERE toUpper(x) CONTAINS 'HTTP/') AND c.enabled=true RETURN c.name as Computer, c.serviceprincipalnames as SPN ORDER BY c.name ASC"
+        },
+        {
+            "name": "SAP - Enabled Computers with SAP SPN",
+            "shortname": "CYPHER_Computers_SAP",
+            "category": "15 - Services",
+            "query": "MATCH (c:Computer) WHERE ANY (x IN c.serviceprincipalnames WHERE toUpper(x) CONTAINS 'SAP/') AND c.enabled=true RETURN c.name as Computer, c.serviceprincipalnames as SPN ORDER BY c.name ASC"
+        },
+        {
+            "name": "TERMSRV - Enabled Computers with TERMSRV SPN",
+            "shortname": "CYPHER_Computers_TERMSRV",
+            "category": "15 - Services",
+            "query": "MATCH (c:Computer) WHERE ANY (x IN c.serviceprincipalnames WHERE toUpper(x) CONTAINS 'TERMSRV/') AND c.enabled=true RETURN c.name as Computer, c.serviceprincipalnames as SPN ORDER BY c.name ASC"
+        },
+        {
+            "name": "VPN - Groups that contain the word VPN and their member count",
+            "shortname": "CYPHER_Groups_contain_vpn",
+            "category": "15 - Services",
+            "query": "MATCH (u)-[:MemberOf*1..]->(g:Group) WHERE g.name =~ '.*((?i)vpn).*' RETURN g.name AS GroupName, COUNT(u) AS MemberCount ORDER BY g.name"
+        },
+        {
+            "name": "VPN - Groups that contain the word VPN and their members (TOP 1000)",
+            "shortname": "CYPHER_Groups_contain_vpn",
+            "category": "15 - Services",
+            "query": "MATCH (u)-[:MemberOf*1..]->(g:Group) WHERE g.name =~ '.*((?i)vpn).*' RETURN g.name AS GroupName, u.name, LABELS(u)[0] as type, u.enabled as Enabled ORDER BY GroupName LIMIT 1000"
+        },
+        {
+            "name": "MSSQL - Groups that contain the word SQL and their member count",
+            "shortname": "CYPHER_Groups_contain_SQL_count",
+            "category": "15 - Services",
+            "query": "MATCH (u)-[:MemberOf*1..]->(g:Group) WHERE g.name =~ '.*((?i)sql).*' RETURN g.name AS GroupName, COUNT(u) AS MemberCount ORDER BY g.name"
+        },
+        {
+            "name": "MSSQL - Groups that contain the word SQL and their members (TOP 1000)",
+            "shortname": "CYPHER_Groups_contain_SQL",
+            "category": "15 - Services",
+            "query": "MATCH (u)-[:MemberOf*1..]->(g:Group) WHERE g.name =~ '.*((?i)sql).*' RETURN g.name AS GroupName, u.name, LABELS(u)[0] as type, u.enabled as Enabled ORDER BY GroupName LIMIT 1000"
+        },
+        {
+            "name": "Groups that contain the word service/svc and their member count",
+            "shortname": "CYPHER_Groups_contain_service_count",
+            "category": "15 - Services",
+            "query": "MATCH (u)-[:MemberOf*1..]->(g:Group) WHERE g.name =~ '.*((?i)svc|service).*' RETURN g.name AS GroupName, COUNT(u) AS MemberCount ORDER BY g.name"
+        },
+        {
+            "name": "Groups that contain the word service/svc and their members (TOP 1000)",
+            "shortname": "CYPHER_Groups_contain_service",
+            "category": "15 - Services",
+            "query": "MATCH (u)-[:MemberOf*1..]->(g:Group) WHERE g.name =~ '.*((?i)svc|service).*' RETURN g.name AS GroupName, u.name, LABELS(u)[0] as type, u.enabled as Enabled ORDER BY GroupName LIMIT 1000"
+        },
+        {
+            "name": "ADCS - Templates",
+            "shortname": "CYPHER_ADCS_Templates",
+            "category": "15 - Services",
+            "query": "MATCH (n:GPO) WHERE n.type = 'Certificate Template' RETURN n.`Display Name` as Name, n.highvalue as HighValue, n.Enabled as Enabled, n.`Enrollee Supplies Subject` as EnroleeSuppliesSjb, n.domain as Domain, n.`Extended Key Usage` as `Key Usage`"
+        },
+        {
+            "name": "ADCS - Certificate Authorities",
+            "shortname": "CYPHER_ADCS_Authorities",
+            "category": "15 - Services",
+            "query": "MATCH (n:GPO) WHERE n.type = 'Enrollment Service' RETURN n.`DNS Name` as DNS, n.`CA Name` as Name, n.domain as Domain, n.`Web Enrollment` as `Web Enrollment`"
+        },
+        {
+            "name": "ADCS - Certificate Enrollment Rights",
+            "shortname": "CYPHER_ADCS_ENROLLMENT_RIGHTS",
+            "category": "15 - Services",
+            "query": "MATCH p=(g)-[:Enroll|AutoEnroll]->(n:GPO) WHERE n.type = 'Certificate Template' return n.`Display Name` as Template, n.Enabled as Enabled, g.name as `Enrollment Rights`"
+        },
+        {
+            "name": "ADCS - Certificate Template vulnerable to ESC1",
+            "shortname": "CYPHER_ADCS_ESC1",
+            "category": "15 - Services",
+            "query": "MATCH (n:GPO) WHERE n.type = 'Certificate Template' and n.`Enrollee Supplies Subject` = true and n.`Client Authentication` = true and n.`Enabled` = true  RETURN n.`Display Name` as `Display Name`, n.`Template Name` as Name, n.domain as Domain, n.`Certificate Authorities` as CAs"
+        },
+        {
+            "name": "ADCS - Certificate Template vulnerable to ESC2",
+            "shortname": "CYPHER_ADCS_ESC2",
+            "category": "15 - Services",
+            "query": "MATCH (n:GPO) WHERE n.type = 'Certificate Template' and n.`Enabled` = true and (n.`Extended Key Usage` = [] or 'Any Purpose' IN n.`Extended Key Usage`) RETURN n.`Display Name` as `Display Name`, n.`Template Name` as Name, n.domain as Domain, n.`Certificate Authorities` as CAs"
+        },
+        {
+            "name": "ADCS - Certificate Template vulnerable to ESC3",
+            "shortname": "CYPHER_ADCS_ESC3",
+            "category": "15 - Services",
+            "query": "MATCH (n:GPO) WHERE n.type = 'Certificate Template' and n.`Enabled` = true and (n.`Extended Key Usage` = [] or 'Any Purpose' IN n.`Extended Key Usage` or 'Certificate Request Agent' IN n.`Extended Key Usage`) RETURN n.`Display Name` as `Display Name`, n.`Template Name` as Name, n.domain as Domain, n.`Certificate Authorities` as CAs"
+        },
+        {
+            "name": "ADCS - Certificate Template vulnerable to ESC6",
+            "shortname": "CYPHER_ADCS_ESC6",
+            "category": "15 - Services",
+            "query": "MATCH (n:GPO) WHERE n.type = 'Enrollment Service' and n.`User Specified SAN` = 'Enabled' RETURN n.`Display Name` as `Display Name`, n.`Template Name` as Name, n.domain as Domain, n.`Certificate Authorities` as CAs"
+        },
+        {
+            "name": "ADCS - Certificate Template vulnerable to ESC8",
+            "shortname": "CYPHER_ADCS_ESC8",
+            "category": "15 - Services",
+            "query": "MATCH (n:GPO) WHERE n.type = 'Enrollment Service' and n.`Web Enrollment` = 'Enabled' RETURN n.`Display Name` as `Display Name`, n.`Template Name` as Name, n.domain as Domain, n.`Certificate Authorities` as CAs"
+        },        {
+            "name": "RDP - RDPable Servers",
+            "category": "15 - Services",
+            "shortname": "CYPHER_RDPServers",
+            "query": "MATCH (g:Group)-[:CanRDP]->(c:Computer) WHERE g.objectid ENDS WITH '-513' AND c.operatingsystem CONTAINS 'Server' RETURN c.name AS Computer LIMIT 5000"
+        },
+        {
+            "name": "RDP - Groups",
+            "category": "15 - Services",
+            "shortname": "CYPHER_RDPGroups",
+            "query": "MATCH p=(m:Group)-[r:CanRDP]->(n:Computer) RETURN m.name as Group, count(*) as Computer ORDER BY Computer DESC LIMIT 5000"
+        },
+        {
+            "name": "RDP - Users",
+            "category": "15 - Services",
+            "shortname": "CYPHER_RDPUsers",
+            "query": "MATCH p=(m:User)-[r:CanRDP]->(n:Computer) RETURN m.User as User, count(*) as Computer ORDER BY Computer DESC LIMIT 5000"
+        }
+	]
+}

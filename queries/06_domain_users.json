@@ -1,0 +1,10 @@
+{
+    "queries": [		
+        {
+            "name": "Domain Users with path to DA",
+            "shortname": "DU_path_DA",
+            "category": "06 - Domain Users",
+            "query": "MATCH p=ShortestPath((n:Group)-[*1..]->(m:Group)) WHERE n.name STARTS WITH 'DOMAIN USERS' and m.name CONTAINS 'DOMAIN ADMINS' AND n <> m RETURN p"
+        }
+	]
+}

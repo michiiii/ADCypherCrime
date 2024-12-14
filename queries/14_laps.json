@@ -1,0 +1,22 @@
+{
+    "queries": [		
+        {
+            "name": "LAPS Deployment Count",
+            "category": "14 - LAPS",
+            "shortname": "CYPHER_LAPSDeploymentCount",
+            "query": "MATCH (c:Computer) RETURN c.haslaps as LAPSEnabled, count(*) as Computers ORDER BY Computers DESC LIMIT 5000"
+        },
+        {
+            "name": "LAPS Deployment OS Count",
+            "category": "14 - LAPS",
+            "shortname": "CYPHER_LAPSDeploymentOSCount",
+            "query": "MATCH (c:Computer) RETURN c.haslaps as LAPSEnabled, c.operatingsystem as OS, count(*) as Computers ORDER BY LAPSEnabled DESC, Computers DESC LIMIT 5000"
+        },
+        {
+            "name": "LAPS Not Enabled",
+            "category": "14 - LAPS",
+            "shortname": "CYPHER_LAPSNotEnabled",
+            "query": "MATCH (c:Computer) WHERE c.haslaps=false and c.enabled=true RETURN c.name as Computer, c.enabled as Enabled, c.operatingsystem as OS,c.haslaps as LAPSEnabled, toString(datetime({epochSeconds: ToInteger(coalesce(c.lastlogon,0))})) as LastLogon, c.description as Descirption ORDER BY Computer"
+        }
+	]
+}

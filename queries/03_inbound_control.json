@@ -1,0 +1,10 @@
+{
+    "queries": [		
+        {
+            "name": "Inbound object control",
+            "shortname": "CYPHER_Inbound_Object_Control",
+            "category": "03 - Object control inbound",
+            "query": "MATCH (u:User) MATCH (n)-[r]->(u) WHERE r.isacl = true WITH u.name as name, u.objectid as objectid, COUNT(DISTINCT n) as inbound_control_count RETURN name, objectid, inbound_control_count ORDER BY inbound_control_count DESC LIMIT 10000"
+        }
+	]
+}
