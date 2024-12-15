@@ -171,7 +171,7 @@ def export_cypher_crime_html(cypher_data, report_directory):
     <title>{category} - AD Cypher Crime Results</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -180,21 +180,68 @@ def export_cypher_crime_html(cypher_data, report_directory):
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
     <style>
-        pre {{
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            display: inline-block;
+        body {{
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
         }}
-        code {{
-            font-family: 'Courier New', monospace;
-            white-space: pre-wrap;
+        .navbar {{
+            background-color: #1f1f1f;
+            border-bottom: 1px solid #333;
+        }}
+        .navbar-nav .nav-link {{
+            color: #b0b0b0 !important;
+        }}
+        .navbar-nav .nav-link:hover {{
+            color: #ffffff !important;
+        }}
+        .card {{
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            color: #e0e0e0;
+        }}
+        .card-header {{
+            background-color: #252525;
+            border-bottom: 1px solid #333;
+        }}
+        pre, code {{
+            background-color: #1e1e1e;
+            color: #a5d6a7;
+            border: 1px solid #333;
+            padding: 10px;
+            border-radius: 4px;
+        }}
+        .table {{
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border: 1px solid #333;
+        }}
+        .table-striped tbody tr:nth-of-type(odd) {{
+            background-color: #2c2c2c;
+        }}
+        .table-striped tbody tr:nth-of-type(even) {{
+            background-color: #1e1e1e;
+        }}
+        .table tbody tr:hover {{
+            background-color: #333;
+        }}
+        .btn-link {{
+            color: #90caf9;
+        }}
+        .btn-link:hover {{
+            color: #ffffff;
+            text-decoration: underline;
+        }}
+        h2 {{
+            color: #90caf9;
+            font-weight: 600;
         }}
     </style>
 </head>
 <body>
 
-<nav class='navbar navbar-expand-lg navbar-light bg-light'>
-    <a class='navbar-brand' href='#'>AD Cypher Crime Reports</a>
+<nav class='navbar navbar-expand-lg navbar-light'>
+    <a class='navbar-brand text-light' href='#'>AD Cypher Crime Reports</a>
     <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
         <span class='navbar-toggler-icon'></span>
     </button>
@@ -240,14 +287,16 @@ def export_cypher_crime_html(cypher_data, report_directory):
 {cypher_query}
             </code>
         </pre>    
-            <table class='table table-striped table-bordered' id='table{short_name}'>
-                <thead>
-                    <tr>{table_headers}</tr>
-                </thead>
-                <tbody>
-                    {table_rows}
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class='table table-striped table-bordered' id='table{short_name}'>
+                    <thead>
+                        <tr>{table_headers}</tr>
+                    </thead>
+                    <tbody>
+                        {table_rows}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
