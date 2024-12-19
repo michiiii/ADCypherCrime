@@ -63,8 +63,3 @@ options:
 
 ![AD Cypher Crime Screenshot](img/screenshot.png)
 
-## Author
-Michael Ritter
-
-## License
-This project is licensed under the [MIT License](LICENSE). Feel free to clone, modify, and use it as per your needs.
